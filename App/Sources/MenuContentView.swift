@@ -60,7 +60,7 @@ struct MenuContentView: View {
 
     private var header: some View {
         HStack(spacing: 8) {
-            Image(systemName: GaugeIcon.name(lowestLeft: store.lowestLeft))
+            Image(systemName: GaugeIcon.name(lowestLeft: store.lowestLeft, mode: store.displayMode))
                 .font(.title3)
                 .foregroundStyle(GaugeIcon.tint(lowestLeft: store.lowestLeft))
                 .contentTransition(.symbolEffect(.replace))
@@ -162,7 +162,7 @@ struct PillButtonStyle: ButtonStyle {
     }
 }
 
-/// One account card: name, plan and email, then the 5-hour and weekly windows (or why they're missing). Cards fade and slide in one after another when the menu opens.
+/// One account card: name, plan and email, then the weekly window (or why they're missing). Cards fade and slide in one after another when the menu opens.
 struct AccountRowView: View {
     let account: Account
     let usage: AccountUsage?
@@ -207,8 +207,7 @@ struct AccountRowView: View {
 
     @ViewBuilder private var content: some View {
         if let report = usage?.report {
-            WindowRow(title: "5-hour", window: report.session, mode: mode, now: now, delay: Double(index) * 0.06)
-            WindowRow(title: "Weekly", window: report.week, mode: mode, now: now, delay: Double(index) * 0.06 + 0.05)
+            WindowRow(title: "Weekly", window: report.week, mode: mode, now: now, delay: Double(index) * 0.06)
         } else if usage?.needsSignIn == true {
             HStack {
                 Label("Not signed in", systemImage: "person.crop.circle.badge.exclamationmark")
@@ -326,9 +325,11 @@ struct SpinningArrow: View {
 
 /// The menu-bar gauge: its needle follows the least left in any window of any account, and the header copy turns that level's colour.
 enum GaugeIcon {
-    static func name(lowestLeft: Double?) -> String {
-        guard let left = lowestLeft else { return "gauge.with.dots.needle.33percent" }
-        switch left {
+    /// The needle shows the same number the menu does: what's left in `.left` mode, what's used in `.used` mode.
+    static func name(lowestLeft: Double?, mode: DisplayMode) -> String {
+        guard let lowest = lowestLeft else { return "gauge.with.dots.needle.33percent" }
+        let shown = mode == .used ? 100 - lowest : lowest
+        switch shown {
         case 84...: return "gauge.with.dots.needle.100percent"
         case 59..<84: return "gauge.with.dots.needle.67percent"
         case 42..<59: return "gauge.with.dots.needle.50percent"

@@ -1,10 +1,10 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 # claudebar
 
-A small macOS menu-bar app (plus a CLI) that shows how much of the **5-hour session** and the **weekly** limit is left on each of your Claude accounts, however many you use with Claude Code. Click the icon to see them all at once; press **Refresh** whenever you like.
+A small macOS menu-bar app (plus a CLI) that shows how much of the **weekly** limit is left on each of your Claude accounts, however many you use with Claude Code. Click the icon to see them all at once; press **Refresh** whenever you like.
 
 <p align="center">
-  <img src="docs/images/menu-left.png" alt="claudebar menu: three accounts, each with a 5-hour and a weekly bar showing the percentage left, in green, yellow and red" width="360">
+  <img src="docs/images/menu-left.png" alt="claudebar menu: three accounts, each with a weekly bar showing the percentage left, in green, yellow and red" width="360">
 </p>
 
 <details>

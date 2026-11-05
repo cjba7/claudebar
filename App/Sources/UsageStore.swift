@@ -61,7 +61,7 @@ final class UsageStore: ObservableObject {
 
     /// The least left in any window of any account, 0-100, for the menu-bar gauge; nil before the first numbers arrive.
     var lowestLeft: Double? {
-        let windows = usage.values.compactMap(\.report).flatMap { [$0.session, $0.week] }.compactMap { $0 }
+        let windows = usage.values.compactMap(\.report).compactMap(\.week)
         return windows.map(\.leftPercent).min()
     }
 

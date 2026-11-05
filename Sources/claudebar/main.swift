@@ -6,7 +6,7 @@
 import Foundation
 import UsageKit
 
-// claudebar CLI: every configured account's 5-hour and weekly limits, from the same probe as the menu-bar app.
+// claudebar CLI: every configured account's weekly limit, from the same probe as the menu-bar app.
 
 func fail(_ message: String, code: Int32) -> Never {
     FileHandle.standardError.write(Data("claudebar: \(message)\n".utf8))
@@ -19,7 +19,7 @@ if arguments.contains("-h") || arguments.contains("--help") {
     print("""
         usage: claudebar [--json] [--left | --used]
 
-        Shows the 5-hour session and weekly limit on each account in \(configPath).
+        Shows the weekly limit on each account in \(configPath).
           --left   percent remaining (a fresh week is 100%)
           --used   percent used (a fresh week is 0%)
         Without either, the app's Settings → General choice applies (left by default).
@@ -119,7 +119,6 @@ for (account, usage) in rows {
     if account.isInUse(usage: usage, defaultLogin: defaultLogin) { details.append("in use") }
     print(paint(account.name, "1") + (details.isEmpty ? "" : "  " + paint(details.joined(separator: " · "), "2")))
     if let report = usage.report {
-        print(windowLine("5-hour", report.session))
         print(windowLine("weekly", report.week))
     } else {
         let hint = usage.needsSignIn ? paint("  (Sign in… in claudebar's Settings)", "2") : ""
