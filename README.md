@@ -35,7 +35,7 @@ The colours follow what's left whichever way the numbers read:
 | 🟡 Yellow | more than 20%, up to 50% | 50% up to under 80% |
 | 🔴 Red (the bar glows gently) | 20% or less | 80% or more |
 
-The thresholds live in one place, `UsageLevel` in `Sources/UsageKit/Display.swift`, shared by the app and the CLI. The menu-bar gauge's needle follows the lowest "left" across all your accounts, and bounces once each time fresh numbers land.
+The thresholds live in one place, `UsageLevel` in `Sources/UsageKit/Display.swift`, shared by the app and the CLI. The menu-bar gauge's needle follows the average "left" across all your accounts, and bounces once each time fresh numbers land.
 
 ## How it works
 

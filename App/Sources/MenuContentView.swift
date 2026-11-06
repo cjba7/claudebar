@@ -60,9 +60,9 @@ struct MenuContentView: View {
 
     private var header: some View {
         HStack(spacing: 8) {
-            Image(systemName: GaugeIcon.name(lowestLeft: store.lowestLeft, mode: store.displayMode))
+            Image(systemName: GaugeIcon.name(averageLeft: store.averageLeft, mode: store.displayMode))
                 .font(.title3)
-                .foregroundStyle(GaugeIcon.tint(lowestLeft: store.lowestLeft))
+                .foregroundStyle(GaugeIcon.tint(averageLeft: store.averageLeft))
                 .contentTransition(.symbolEffect(.replace))
             Text("claudebar").font(.headline)
             Spacer()
@@ -323,12 +323,12 @@ struct SpinningArrow: View {
     }
 }
 
-/// The menu-bar gauge: its needle follows the least left in any window of any account, and the header copy turns that level's colour.
+/// The menu-bar gauge: its needle follows the average left across all accounts, and the header copy turns that level's colour.
 enum GaugeIcon {
     /// The needle shows the same number the menu does: what's left in `.left` mode, what's used in `.used` mode.
-    static func name(lowestLeft: Double?, mode: DisplayMode) -> String {
-        guard let lowest = lowestLeft else { return "gauge.with.dots.needle.33percent" }
-        let shown = mode == .used ? 100 - lowest : lowest
+    static func name(averageLeft: Double?, mode: DisplayMode) -> String {
+        guard let average = averageLeft else { return "gauge.with.dots.needle.33percent" }
+        let shown = mode == .used ? 100 - average : average
         switch shown {
         case 84...: return "gauge.with.dots.needle.100percent"
         case 59..<84: return "gauge.with.dots.needle.67percent"
@@ -338,7 +338,7 @@ enum GaugeIcon {
         }
     }
 
-    static func tint(lowestLeft: Double?) -> Color {
-        lowestLeft.map { UsageLevel(leftPercent: $0).color } ?? .secondary
+    static func tint(averageLeft: Double?) -> Color {
+        averageLeft.map { UsageLevel(leftPercent: $0).color } ?? .secondary
     }
 }

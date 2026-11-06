@@ -15,8 +15,8 @@ struct ClaudebarApp: App {
         MenuBarExtra {
             MenuContentView(store: store)
         } label: {
-            // The needle follows the least left on any account (or the most used, in "used" mode); it bounces once when fresh numbers land.
-            Image(systemName: GaugeIcon.name(lowestLeft: store.lowestLeft, mode: store.displayMode))
+            // The needle follows the average left across all accounts (or the average used, in "used" mode); it bounces once when fresh numbers land.
+            Image(systemName: GaugeIcon.name(averageLeft: store.averageLeft, mode: store.displayMode))
                 .symbolEffect(.bounce, value: store.lastRefresh)
         }
         .menuBarExtraStyle(.window)

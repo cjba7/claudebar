@@ -59,10 +59,10 @@ final class UsageStore: ObservableObject {
         account.isInUse(usage: usage[account.id], defaultLogin: defaultLogin)
     }
 
-    /// The least left in any window of any account, 0-100, for the menu-bar gauge; nil before the first numbers arrive.
-    var lowestLeft: Double? {
-        let windows = usage.values.compactMap(\.report).compactMap(\.week)
-        return windows.map(\.leftPercent).min()
+    /// The average left across every account's weekly window, 0-100, for the menu-bar gauge; nil before the first numbers arrive.
+    var averageLeft: Double? {
+        let lefts = usage.values.compactMap(\.report).compactMap(\.week).map(\.leftPercent)
+        return lefts.isEmpty ? nil : lefts.reduce(0, +) / Double(lefts.count)
     }
 
     // MARK: - Refresh
