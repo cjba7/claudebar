@@ -18,7 +18,8 @@ enum Demo {
             let auth = AuthStatus(loggedIn: true, email: email, orgId: id, subscriptionType: plan)
             let report = UsageReport(
                 session: UsageWindow(usedPercent: session, resetsAt: now.addingTimeInterval(sessionIn)),
-                week: UsageWindow(usedPercent: week, resetsAt: now.addingTimeInterval(weekIn)))
+                week: UsageWindow(usedPercent: week, resetsAt: now.addingTimeInterval(weekIn)),
+                fable: UsageWindow(usedPercent: min(100, week * 1.3), resetsAt: now.addingTimeInterval(weekIn)))
             return (Account(id: id, name: name, configDir: "~/.claude-accounts/\(id)"),
                     AccountUsage(auth: auth, report: report, problem: nil))
         }

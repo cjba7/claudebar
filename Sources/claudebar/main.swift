@@ -19,7 +19,7 @@ if arguments.contains("-h") || arguments.contains("--help") {
     print("""
         usage: claudebar [--json] [--left | --used]
 
-        Shows the weekly limit on each account in \(configPath).
+        Shows the weekly and Fable weekly limits on each account in \(configPath).
           --left   percent remaining (a fresh week is 100%)
           --used   percent used (a fresh week is 0%)
         Without either, the app's Settings → General choice applies (left by default).
@@ -67,6 +67,7 @@ if asJSON {
         let inUse: Bool
         let session: WindowJSON?
         let week: WindowJSON?
+        let fable: WindowJSON?
         let problem: String?
         let fetchedAt: Date
     }
@@ -75,7 +76,7 @@ if asJSON {
             id: account.id, name: account.name,
             email: usage.auth?.email ?? account.email, plan: usage.auth?.subscriptionType,
             inUse: account.isInUse(usage: usage, defaultLogin: defaultLogin),
-            session: usage.report?.session.map(WindowJSON.init), week: usage.report?.week.map(WindowJSON.init),
+            session: usage.report?.session.map(WindowJSON.init), week: usage.report?.week.map(WindowJSON.init), fable: usage.report?.fable.map(WindowJSON.init),
             problem: usage.problem, fetchedAt: usage.fetchedAt)
     }
     let encoder = JSONEncoder()
@@ -120,6 +121,7 @@ for (account, usage) in rows {
     print(paint(account.name, "1") + (details.isEmpty ? "" : "  " + paint(details.joined(separator: " · "), "2")))
     if let report = usage.report {
         print(windowLine("weekly", report.week))
+        if let fable = report.fable { print(windowLine("fable", fable)) }
     } else {
         let hint = usage.needsSignIn ? paint("  (Sign in… in claudebar's Settings)", "2") : ""
         print("  " + paint(usage.problem ?? "no data", "33") + hint)

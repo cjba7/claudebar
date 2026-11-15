@@ -41,8 +41,17 @@ final class UsageParserTests: XCTestCase {
         XCTAssertEqual(report.week?.resetsAt, madridDate(2026, 9, 29, 2, 59))
     }
 
-    func testIgnoresPerModelWeeks() {
-        let report = UsageParser.parse("Current week (Fable): 80% used · resets Sep 29 at 3am (Europe/Madrid)", now: now)
+    func testParsesFableWeek() {
+        let report = UsageParser.parse(sample, now: now)
+        XCTAssertEqual(report.fable?.usedPercent, 0)
+        XCTAssertEqual(report.fable?.resetsAt, madridDate(2026, 9, 29, 3, 0))
+        let only = UsageParser.parse("Current week (Fable): 80% used · resets Sep 29 at 3am (Europe/Madrid)", now: now)
+        XCTAssertEqual(only.fable?.usedPercent, 80)
+        XCTAssertNil(only.week)
+    }
+
+    func testIgnoresOtherPerModelWeeks() {
+        let report = UsageParser.parse("Current week (Opus): 80% used · resets Sep 29 at 3am (Europe/Madrid)", now: now)
         XCTAssertTrue(report.isEmpty)
     }
 

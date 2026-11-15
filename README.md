@@ -39,14 +39,14 @@ The thresholds live in one place, `UsageLevel` in `Sources/UsageKit/Display.swif
 
 ## How it works
 
-Claude Code already knows these numbers: `claude -p /usage` runs `/usage` as a local command and prints what the interactive screen shows, with no model call (0 tokens, $0). claudebar runs it once per account, each against that account's own Claude Code config folder (`CLAUDE_CONFIG_DIR`), and reads the two lines it needs:
+Claude Code already knows these numbers: `claude -p /usage` runs `/usage` as a local command and prints what the interactive screen shows, with no model call (0 tokens, $0). claudebar runs it once per account, each against that account's own Claude Code config folder (`CLAUDE_CONFIG_DIR`), and reads the two lines it needs (the Fable line is shown under the weekly one):
 
 ```
-Current session: 2% used · resets Sep 24 at 4:49pm (Europe/Madrid)
 Current week (all models): 54% used · resets Sep 29 at 2:59am (Europe/Madrid)
+Current week (Fable): 0% used · resets Sep 29 at 3am (Europe/Madrid)
 ```
 
-Per-model weekly lines (Fable and the like) are ignored. `claude auth status --json` adds each account's email and plan, and one more run against your default `~/.claude` marks whichever account a plain `claude` is signed in to as **in use**.
+Other per-model weekly lines are ignored. `claude auth status --json` adds each account's email and plan, and one more run against your default `~/.claude` marks whichever account a plain `claude` is signed in to as **in use**.
 
 Claude Code keeps each folder's login fresh by itself, so claudebar never reads, stores or refreshes a token. Every probe runs with `--safe-mode` (no hooks, MCP servers or plugins) and `--no-session-persistence` (no session left behind), with auto-update switched off, and without your `ANTHROPIC_*` / `CLAUDE*` environment variables, so an API key or a parent session can't change what it reports. Telemetry is deliberately left as it is: `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` stops `/usage` fetching live numbers, and even `DISABLE_TELEMETRY` changes what it prints. Accounts are probed in parallel, so a refresh takes a few seconds however many there are.
 

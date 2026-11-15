@@ -21,17 +21,19 @@ public struct UsageWindow: Codable, Equatable, Sendable {
     public var leftPercent: Double { max(0, min(100, 100 - usedPercent)) }
 }
 
-/// The two windows claudebar shows: the 5-hour session and the all-models week. Per-model weekly windows (Fable, and whatever else /usage lists) are ignored on purpose.
+/// The windows claudebar shows: the all-models week and the Fable weekly cap (shown below it). The 5-hour session is still read when /usage prints it but is no longer displayed; other per-model weeks are ignored.
 public struct UsageReport: Codable, Equatable, Sendable {
     public var session: UsageWindow?
     public var week: UsageWindow?
+    public var fable: UsageWindow?
 
-    public init(session: UsageWindow? = nil, week: UsageWindow? = nil) {
+    public init(session: UsageWindow? = nil, week: UsageWindow? = nil, fable: UsageWindow? = nil) {
         self.session = session
         self.week = week
+        self.fable = fable
     }
 
-    public var isEmpty: Bool { session == nil && week == nil }
+    public var isEmpty: Bool { session == nil && week == nil && fable == nil }
 }
 
 /// Reads the text `claude -p /usage` prints. Claude Code gives these numbers in no other form, so this is the one place that depends on its wording:
@@ -48,6 +50,8 @@ public enum UsageParser {
                 report.session = window(rest, now: now)
             } else if let rest = line.removingPrefix("Current week (all models):") ?? line.removingPrefix("Current week:") {
                 report.week = window(rest, now: now)
+            } else if let rest = line.removingPrefix("Current week (Fable):") {
+                report.fable = window(rest, now: now)
             }
         }
         return report

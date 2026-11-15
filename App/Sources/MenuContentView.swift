@@ -208,6 +208,9 @@ struct AccountRowView: View {
     @ViewBuilder private var content: some View {
         if let report = usage?.report {
             WindowRow(title: "Weekly", window: report.week, mode: mode, now: now, delay: Double(index) * 0.06)
+            if report.fable != nil {
+                WindowRow(title: "Fable", window: report.fable, mode: mode, now: now, delay: Double(index) * 0.06 + 0.06)
+            }
         } else if usage?.needsSignIn == true {
             HStack {
                 Label("Not signed in", systemImage: "person.crop.circle.badge.exclamationmark")
